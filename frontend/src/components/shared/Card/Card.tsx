@@ -1,4 +1,5 @@
 import {CardContainer} from "./Card.styles.ts";
+import {useNavigate} from "react-router-dom";
 
 export interface CardProps {
     id: string;
@@ -7,8 +8,15 @@ export interface CardProps {
 }
 
 function Card(props: Readonly<CardProps>) {
+
+    const navigate = useNavigate();
+
+    function handleCardClick() {
+        navigate(`/todos/${props.id}`);
+    }
+
     return (
-        <CardContainer>
+        <CardContainer onClick={handleCardClick} style={{ cursor: "pointer" }}>
             <p>{props.description}</p>
             <p>{props.status}</p>
         </CardContainer>

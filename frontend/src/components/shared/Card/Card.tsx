@@ -7,6 +7,7 @@ export interface CardProps {
     description: string;
     status: "OPEN" | "IN_PROGRESS" | "DONE";
     onUpdate: (id: string, updatedDescription: string) => void;
+    onDelete: (id: string) => void;
 }
 
 function Card(props: Readonly<CardProps>) { const navigate = useNavigate();
@@ -31,6 +32,11 @@ function Card(props: Readonly<CardProps>) { const navigate = useNavigate();
         }
     }
 
+
+    function handleDelete() {
+        props.onDelete(props.id); // Call the onDelete prop
+    }
+
     // Determine the button label based on the current view
     const buttonLabel = location.pathname === "/" ? "Details" : "Back";
 
@@ -50,9 +56,12 @@ function Card(props: Readonly<CardProps>) { const navigate = useNavigate();
                 <div>
                     <p>{props.description}</p>
                     <p>{props.status}</p>
-                    <button onClick={toggleEdit}>Edit</button>
-                    <button onClick={handleToggleView} style={{ marginTop: "10px" }}>
+                    <button onClick={handleToggleView} style={{marginTop: "10px"}}>
                         {buttonLabel}
+                    </button>
+                    <button onClick={toggleEdit}>Edit</button>
+                    <button onClick={handleDelete} style={{marginTop: "10px", color: "red"}}>
+                        Delete
                     </button>
                 </div>
             )}

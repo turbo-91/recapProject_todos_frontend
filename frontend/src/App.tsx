@@ -61,6 +61,17 @@ function App() {
             });
     };
 
+    const deleteTodo = (id: string) => {
+        axios
+            .delete(`http://localhost:8080/api/todo/${id}`)
+            .then(() => {
+                setData((prevData) => prevData.filter((todo) => todo.id !== id)); // Remove the todo from state
+            })
+            .catch((error) => {
+                console.error("Error deleting todo:", error);
+            });
+    };
+
     console.log("data nach fetch", data)
 
   return (
@@ -72,7 +83,7 @@ function App() {
                 element={
                     <>
                         <TodoForm onSubmit={addTodo} />
-                        <Main data={data} onUpdate={updateTodo} />
+                        <Main data={data} onUpdate={updateTodo} onDelete={deleteTodo} />
                     </>
                 }
             />
@@ -90,7 +101,7 @@ function App() {
             return <p>Todo with ID {id} not found.</p>;
         }
 
-        return <Card id={todo.id} description={todo.description} status={todo.status} onUpdate={updateTodo} />;
+        return <Card id={todo.id} description={todo.description} status={todo.status} onUpdate={updateTodo}  onDelete={deleteTodo}/>;
     }
 }
 

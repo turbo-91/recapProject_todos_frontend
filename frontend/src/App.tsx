@@ -1,6 +1,7 @@
 import Header from "./components/Header/Header.tsx";
 import Footer from "./components/Footer/Footer.tsx";
 import Main from "./components/Main/Main.tsx";
+import TodoForm from "./components/TodoForm/TodoForm.tsx";
 import {useEffect, useState} from "react";
 import axios from 'axios';
 import {Route, Routes, useParams} from "react-router-dom";
@@ -27,6 +28,17 @@ function App() {
             });
     };
 
+    const addTodo = (newTodo: { description: string; status: "OPEN" | "IN_PROGRESS" | "DONE" }) => {
+        axios
+            .post<Todo>("http://localhost:8080/api/todo", newTodo)
+            .then((response) => {
+                setData((prevData) => [...prevData, response.data]); // Append the new todo to the "data" state
+            })
+            .catch((error) => {
+                console.error("Error adding new todo:", error);
+            });
+    };
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -37,26 +49,31 @@ function App() {
     <>
         <Header/>
         <Routes>
-            <Route path="/" element={<Main data={data}/>}/>
+            <Route
+                path="/"
+                element={
+                    <>
+                        <TodoForm onSubmit={addTodo} />
+                        <Main data={data} />
+                    </>
+                }
+            />
             <Route path="/todos/:id" element={<TodoCard data={data} />} />
         </Routes>
         <Footer/>
     </>
   )
 
-    // Wrapper Component for the Card
     function TodoCard({ data }: { data: Todo[] }) {
-        const { id } = useParams<{ id: string }>(); // Get the ID from the URL
-        const todo = data.find((item) => item.id === id); // Find the matching Todo
+        const { id } = useParams<{ id: string }>();
+        const todo = data.find((item) => item.id === id);
 
-        // If the Todo doesn't exist, render an error message
         if (!todo) {
             return <p>Todo with ID {id} not found.</p>;
         }
 
-        // Pass the matching Todo's data to the Card component
         return <Card id={todo.id} description={todo.description} status={todo.status} />;
-
-    }}
+    }
+}
 
 export default App

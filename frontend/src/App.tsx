@@ -43,6 +43,24 @@ function App() {
         fetchData();
     }, []);
 
+    const updateTodo = (id: string, updatedDescription: string) => {
+        const todoToUpdate = data.find((todo) => todo.id === id);
+        if (!todoToUpdate) return;
+
+        const updatedTodo = { ...todoToUpdate, description: updatedDescription };
+
+        axios
+            .put<Todo>(`http://localhost:8080/api/todo/${id}`, updatedTodo)
+            .then((response) => {
+                setData((prevData) =>
+                    prevData.map((todo) => (todo.id === id ? response.data : todo))
+                );
+            })
+            .catch((error) => {
+                console.error("Error updating todo:", error);
+            });
+    };
+
     console.log("data nach fetch", data)
 
   return (
@@ -54,7 +72,7 @@ function App() {
                 element={
                     <>
                         <TodoForm onSubmit={addTodo} />
-                        <Main data={data} />
+                        <Main data={data} onUpdate={updateTodo} />
                     </>
                 }
             />
@@ -72,7 +90,7 @@ function App() {
             return <p>Todo with ID {id} not found.</p>;
         }
 
-        return <Card id={todo.id} description={todo.description} status={todo.status} />;
+        return <Card id={todo.id} description={todo.description} status={todo.status} onUpdate={updateTodo} />;
     }
 }
 

@@ -6,9 +6,10 @@ import Card from "../shared/Card/Card.tsx";
 
 interface MainProps {
     data: Todo[];
+    onUpdate: (id: string, updatedDescription: string) => void;
 }
 
-function Main({data}: MainProps) {
+function Main({data, onUpdate}: MainProps) {
 
     console.log("Data in Main", data)
 
@@ -21,6 +22,7 @@ function Main({data}: MainProps) {
                     id={todo.id}
                     description={todo.description}
                     status={todo.status}
+                    onUpdate={onUpdate}
                 />
             ))}
         </MainContainer>

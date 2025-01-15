@@ -1,12 +1,27 @@
 import {MainContainer} from "./Main.styles.ts";
+import {Todo} from "../../App.tsx";
+import Card from "../shared/Card/Card.tsx";
 
 
-function Main() {
+interface MainProps {
+    data: Todo[];
+}
 
+function Main({data}: MainProps) {
+
+    console.log("Data in Main", data)
 
     return (
         <MainContainer>
-            <p>Main content</p>
+            <h1>Todo List</h1>
+            {data.map((todo) => (
+                <Card
+                    key={todo.id}
+                    id={todo.id}
+                    description={todo.description}
+                    status={todo.status}
+                />
+            ))}
         </MainContainer>
     );
 }

@@ -1,15 +1,16 @@
 import {CardContainer} from "./Card.styles.ts";
 
-interface CardProps {
-    title: string;
+export interface CardProps {
+    id: string;
     description: string;
+    status: "OPEN" | "IN_PROGRESS" | "DONE";
 }
 
 function Card(props: Readonly<CardProps>) {
     return (
         <CardContainer>
-            <h2>{props.title}</h2>
             <p>{props.description}</p>
+            <p>{props.status}</p>
         </CardContainer>
     );
 }

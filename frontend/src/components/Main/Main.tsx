@@ -3,6 +3,7 @@ import {Todo} from "../../App.tsx";
 import Card from "../shared/Card/Card.tsx";
 
 
+
 interface MainProps {
     data: Todo[];
 }
